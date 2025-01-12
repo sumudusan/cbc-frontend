@@ -1,28 +1,57 @@
+import { useState } from "react";
+import axios from 'axios';
 import { Link } from "react-router-dom";
-
+import toast from 'react-hot-toast'
 export default function LoginPage() {
-  return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Login Page</h1>
 
-      <div className="w-80 bg-white p-6 rounded-lg shadow-md">
-        <input
-          className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="text"
-          placeholder="Enter your Name"
-        />
-        <input
-          className="w-full border border-gray-300 rounded px-4 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="password"
-          placeholder="Enter your Password"
-        />
-        <Link
-          to="/homePage"
-          className="w-full text-center bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200 block"
-        >
-          Login
-        </Link>
-      </div>
+  const[email, setEmail]      =  useState("Your Email")
+  const[password, setPassword]= useState("Your Password")
+
+  function login(){
+    axios.post("http://localhost:5000/api/users/login",{
+      email :email,
+      password :password
+    }).then(
+      (res)=>{
+        console.log(res)
+        //firstly we look if there is a user logged in.
+        //if it has not logged in an user return 
+        if(res.data.user==null){
+          //use 'toast for display message'
+          toast.error(res.data.message)//get the error from a message
+          return
+        }
+        toast.success("Login success")
+        //keep the token for upcoming events
+        localStorage.setItem("token", res.data.token)
+        //if user type is admin, navigate to '/admin'
+        //else navigate to home page
+        if(res.data.user.type=="admin"){
+          window.location.href = "/admin"
+        }else{
+          window.location.href = "/"
+        }
+      }
+    )
+  }
+
+  return (
+   <div className="bg-red-500 h-screen w-full flex items-center justify-center">
+    <div className="w-[450px] h-[450px] bg-blue-400 flex flex-col justify-center items-center">
+      <img src="1.png"
+      className="border rounded-full w-[100px]"
+      />
+      <span>Email</span><input defaultValue={email} onChange={(e)=>{
+        setEmail(e.target.value)
+      }}
+      className="rounded-md"/>
+      <span>Password</span> <input defaultValue={password} onChange={(e)=>{
+        setPassword(e.target.value)
+      }}
+      className="rounded-md"/>
+      <button onClick={login}
+      className="bg-white rounded-lg">Login</button>
     </div>
+   </div>
   );
 }
