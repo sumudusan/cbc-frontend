@@ -6,6 +6,7 @@ import UserData from "./components/UserData"
 import HomePage from "./pages/homePage"
 import LoginPage from "./pages/loginPage"
 import AdminHomePage from "./pages/AdminHomePage";
+import AddProductForm from "./pages/admin/addProductForm"
 
 export default function App(){
 
@@ -17,6 +18,7 @@ export default function App(){
       <Route path="/" element={<LoginPage/>}/>
       <Route path="/HomePage" element={<HomePage/>} />
       <Route path="/admin/*" element={<AdminHomePage/>}/>
+      <Route path="/products/addProduct" element={<AddProductForm/>}/>
       <Route path="/UserData" element={<UserData/>} />
     </Routes>
     </BrowserRouter>
