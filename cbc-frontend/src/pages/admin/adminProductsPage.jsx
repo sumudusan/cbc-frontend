@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaTrash, FaEdit , FaPlus} from "react-icons/fa";
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState([]);
@@ -17,6 +17,8 @@ export default function AdminProductsPage() {
       });
     }
    }, [productsLoaded]);
+
+   const navigate= useNavigate();
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 relative">
@@ -79,7 +81,16 @@ export default function AdminProductsPage() {
                   >
                   <FaTrash className="text-red-500 cursor-pointer" />
                   </button>
-                  <FaEdit className="text-blue-500 cursor-pointer" />
+                  <button className="text-blue-500 hover:text-blue-700 "
+                  title="Edit"
+                  onClick={()=>{
+                    //move to edit product page
+                    navigate("/admin/products/editProduct" , {state: {product : product}});
+                  }}
+                  >
+                    <FaEdit className="text-blue-500 cursor-pointer" />
+                  </button>
+                  
                 </td>
               </tr>
             ))}
